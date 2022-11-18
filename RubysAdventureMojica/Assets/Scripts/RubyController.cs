@@ -4,9 +4,31 @@ using UnityEngine;
 
 public class RubyController : MonoBehaviour
 {
+    public float speed = 3.0f;
+
+    //Creates an integer that says the maximum amount of health that Ruby can have
+    public int maxHealth = 5;
+    
+    public int health {  get { return currentHealth;  }}
+    //Stores the health that Ruby currently has
+    int currentHealth;
+
+    //Creates a new variable called rigidbody2d to store Rigidbody
+    Rigidbody2D rigidbody2D;
+
+    //Two more variables are created to input data for access (FixedUpdate)
+    float horizontal;
+    float vertical;
+
     // Start is called before the first frame update
     void Start()
     {
+
+        //Tells Unity to give Rigidbody2D to any GameObject that it is attached to
+        rigidbody2D = GetComponent<Rigidbody2D>();
+
+        //This sets Ruby's health to max as soon as the game begins
+        currentHealth = maxHealth;
 
     }
 
@@ -14,17 +36,30 @@ public class RubyController : MonoBehaviour
     void Update()
     {
         //Creating the two variables that use the pre built axes
-        float horizontal = Input.GetAxis("Horizontal");
-        float vertical = Input.GetAxis("Vertical");
+        horizontal = Input.GetAxis("Horizontal");
+        vertical = Input.GetAxis("Vertical");
 
-        //Create the movement vector
-        Vector2 position = transform.position;
+    }
+
+    void FixedUpdate()
+    {
+        //Creates the movement vector but it is now adjusted to the Rigidbody position
+        Vector2 position = rigidbody2D.position;
 
         //Changing the x and y position
-        position.x = position.x + 3.0f * horizontal * Time.deltaTime;
-        position.y = position.y + 3.0f * vertical * Time.deltaTime;
+        position.x = position.x + speed * horizontal * Time.deltaTime;
+        position.y = position.y + speed * vertical * Time.deltaTime;
 
-        //Set the updated position
-        transform.position = position;
+        //Updates the new movement according to the Rigidbody
+        rigidbody2D.MovePosition(position);
+    }
+
+    public void ChangeHealth(int amount)
+    {
+        //Clamps the health digits to never go under 0 or over maxHealth(5)
+        currentHealth = Mathf.Clamp(currentHealth + amount, 0, maxHealth);
+
+        //Displays the health in the console window
+        Debug.Log(currentHealth + "/" + maxHealth);
     }
 }
