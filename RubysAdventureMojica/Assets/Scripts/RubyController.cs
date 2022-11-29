@@ -8,10 +8,15 @@ public class RubyController : MonoBehaviour
 
     //Creates an integer that says the maximum amount of health that Ruby can have
     public int maxHealth = 5;
+
+    public float timeInvincible = 2.0f;
     
     public int health {  get { return currentHealth;  }}
     //Stores the health that Ruby currently has
     int currentHealth;
+
+    bool isInvincible;
+    float invincibleTimer;
 
     //Creates a new variable called rigidbody2d to store Rigidbody
     Rigidbody2D rigidbody2D;
@@ -39,6 +44,13 @@ public class RubyController : MonoBehaviour
         horizontal = Input.GetAxis("Horizontal");
         vertical = Input.GetAxis("Vertical");
 
+        if (isInvincible)
+        {
+            invincibleTimer -= Time.deltaTime;
+            if (invincibleTimer < 0)
+                isInvincible = false;
+        }
+
     }
 
     void FixedUpdate()
@@ -56,6 +68,15 @@ public class RubyController : MonoBehaviour
 
     public void ChangeHealth(int amount)
     {
+        if (amount < 0)
+        {
+            if (isInvincible)
+                return;
+
+            isInvincible = true;
+            invincibleTimer = timeInvincible;
+        }
+
         //Clamps the health digits to never go under 0 or over maxHealth(5)
         currentHealth = Mathf.Clamp(currentHealth + amount, 0, maxHealth);
 

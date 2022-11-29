@@ -9,8 +9,8 @@ public class HealthCollectible : MonoBehaviour
         RubyController controller = other.GetComponent<RubyController>();
 
         if (controller != null)
-        { 
-            if(controller.currentHealth < controller.maxHealth
+        {
+            if (controller.health < controller.maxHealth)
             {
                 controller.ChangeHealth(1);
                 Destroy(gameObject);
