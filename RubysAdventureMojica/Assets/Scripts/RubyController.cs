@@ -26,7 +26,10 @@ public class RubyController : MonoBehaviour
     float horizontal;
     float vertical;
 
+    public AudioClip cogThrowClip;
     public GameObject projectilePrefab;
+
+    AudioSource audioSource;
 
     Animator animator;
     Vector2 lookDirection = new Vector2(1,0);
@@ -42,6 +45,13 @@ public class RubyController : MonoBehaviour
         //This sets Ruby's health to max as soon as the game begins
         currentHealth = maxHealth;
 
+        audioSource= GetComponent<AudioSource>();
+
+    }
+
+    public void PlaySound(AudioClip clip)
+    {
+        audioSource.PlayOneShot(clip);
     }
 
     // Update is called once per frame
@@ -130,6 +140,7 @@ public class RubyController : MonoBehaviour
        projectile.Launch(lookDirection, 300);
 
        animator.SetTrigger("Launch");
+       audioSource.PlayOneShot(cogThrowClip);
 
     }
 
